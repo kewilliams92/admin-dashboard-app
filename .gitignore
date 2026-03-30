@@ -1,0 +1,4 @@
+node_modules/
+admin-fronted/.env
+dist/
+.npm
