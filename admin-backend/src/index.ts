@@ -5,9 +5,15 @@ import subjectsRouter from "./routes/subjects";
 const app = express();
 const PORT = 8000;
 
+const frontendUrl = process.env.FRONTEND_URL;
+if (!frontendUrl) {
+  console.warn("FRONTEND_URL is not set; defaulting to http://localhost:3000");
+}
+const corsOrigin = frontendUrl ?? "http://localhost:3000";
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: corsOrigin,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   }),

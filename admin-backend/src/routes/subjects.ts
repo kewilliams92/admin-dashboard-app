@@ -7,10 +7,12 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const { search, department, page = 1, limit = 10 } = req.query;
+    const { search, department, page, limit } = req.query;
 
-    const currentPage = Math.max(1, +page);
-    const limitPage = Math.max(1, +limit);
+    const parsedPage = parseInt(page as string, 10);
+    const parsedLimit = parseInt(limit as string, 10);
+    const currentPage = Math.max(1, Number.isNaN(parsedPage) ? 1 : parsedPage);
+    const limitPage = Math.max(1, Number.isNaN(parsedLimit) ? 10 : parsedLimit);
     const offset = (currentPage - 1) * limitPage;
 
     const filterConditions = [];
@@ -27,7 +29,7 @@ router.get("/", async (req, res) => {
 
     //If department filter exists, match department id
     if (department) {
-      filterConditions.push(ilike(departments.name, `%${departments}%`));
+      filterConditions.push(ilike(departments.name, `%${department}%`));
     }
 
     //combine all filters using AND if any exist
