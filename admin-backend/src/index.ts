@@ -7,14 +7,15 @@ const PORT = 8000;
 
 const frontendUrl = process.env.FRONTEND_URL;
 if (!frontendUrl) {
-  console.warn("FRONTEND_URL is not set; defaulting to http://localhost:3000");
+  console.warn("FRONTEND_URL is not set; defaulting to http://localhost:5173");
 }
-const corsOrigin = frontendUrl ?? "http://localhost:3000";
+const corsOrigin = frontendUrl ?? "http://localhost:5173";
 
 app.use(
   cors({
     origin: corsOrigin,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   }),
 );
