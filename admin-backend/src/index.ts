@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import departmentsRouter from "./routes/departments";
 import subjectsRouter from "./routes/subjects";
 
 const app = express();

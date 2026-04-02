@@ -57,6 +57,8 @@ export const ALLOWED_TYPES = [
 
 export const CLOUDINARY_UPLOAD_URL = import.meta.env.VITE_CLOUDINARY_UPLOAD_URL;
 export const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+export const CLOUDINARY_UPLOAD_PRESET = import.meta.env
+  .VITE_CLOUDINARY_UPLOAD_PRESET;
 export const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -71,18 +73,19 @@ const missingEnvVars = (
     ["REFRESH_TOKEN_KEY", REFRESH_TOKEN_KEY],
     ["CLOUDINARY_UPLOAD_URL", CLOUDINARY_UPLOAD_URL],
     ["CLOUDINARY_CLOUD_NAME", CLOUDINARY_CLOUD_NAME],
+    ["CLOUDINARY_UPLOAD_PRESET", CLOUDINARY_UPLOAD_PRESET],
   ] as [string, string | undefined][]
 )
   .filter(([, value]) => !value)
   .map(([name]) => name);
 
 if (missingEnvVars.length > 0) {
-  throw new Error(
-    `Missing required environment variables: ${missingEnvVars.join(", ")}`,
-  );
+  const message = `Missing required environment variables: ${missingEnvVars.join(", ")}`;
+  if (import.meta.env.PROD) {
+    throw new Error(message);
+  } else {
+    console.warn(message);
+  }
 }
 
 export const REFRESH_TOKEN_URL = `${BASE_URL}/refresh-token`;
-
-export const CLOUDINARY_UPLOAD_PRESET = import.meta.env
-  .VITE_CLOUDINARY_UPLOAD_PRESET;
