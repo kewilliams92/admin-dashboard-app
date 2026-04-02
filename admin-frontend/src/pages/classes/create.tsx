@@ -114,17 +114,20 @@ const Create = () => {
                 <FormField
                   control={form.control}
                   name="bannerUrl"
-                  render={() => (
+                  render={({ field }) => (
                     <FormItem className="space-y-1.5">
-                      <FormLabel>
-                        Banner Image <span className="text-destructive">*</span>
-                      </FormLabel>
+                      <FormLabel>Banner Image</FormLabel>
                       <div className="flex flex-col items-center justify-center gap-2 min-h-28 rounded-md border-2 border-dashed border-foreground/20 bg-muted/30">
                         <ImageIcon className="size-7 text-muted-foreground/40" />
                         <p className="text-sm text-muted-foreground">
                           Image upload coming soon
                         </p>
                       </div>
+                      <input
+                        type="hidden"
+                        {...field}
+                        value={field.value ?? ""}
+                      />
                       <FormMessage />
                     </FormItem>
                   )}

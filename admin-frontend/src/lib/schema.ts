@@ -49,9 +49,7 @@ export const classSchema = z.object({
     required_error: "Status is required",
     invalid_type_error: "Status is required",
   }),
-  bannerUrl: z
-    .string({ required_error: "Banner image is required" })
-    .min(1, "Banner image is required"),
+  bannerUrl: z.string().optional(),
   bannerCldPubId: z.string().optional(),
   inviteCode: z.string().optional(),
   schedules: z.array(scheduleSchema).optional(),
