@@ -28,6 +28,7 @@ import { CreateView } from "@/components/refine-ui/views/create-view";
 import { Breadcrumb } from "@/components/refine-ui/layout/breadcrumb";
 import { classSchema } from "@/lib/schema";
 import { Subject } from "@/types";
+import UploadWidget from "@/components/upload-widget";
 
 type ClassFormValues = z.infer<typeof classSchema>;
 
@@ -71,6 +72,31 @@ const Create = () => {
     },
   });
 
+  const {
+    refineCore: { onFinish },
+    handleSubmit,
+    formState: { isSubmitting, errors },
+    control,
+  } = form;
+
+  const bannerPublicId = form.watch("bannerCldPubId");
+
+  const setBannerImage = (file, field) => {
+    if (file) {
+      field.onChange(file.url);
+      form.setValue("bannerCldPubId", file.publicId, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    } else {
+      field.onChange("");
+      form.setValue("bannerCldPubId", "", {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+  };
+
   const onSubmit = (data: ClassFormValues) => {
     console.log(data);
   };
@@ -112,23 +138,34 @@ const Create = () => {
               >
                 {/* Banner Image — Cloudinary upload coming soon */}
                 <FormField
-                  control={form.control}
+                  control={control}
                   name="bannerUrl"
                   render={({ field }) => (
-                    <FormItem className="space-y-1.5">
-                      <FormLabel>Banner Image</FormLabel>
-                      <div className="flex flex-col items-center justify-center gap-2 min-h-28 rounded-md border-2 border-dashed border-foreground/20 bg-muted/30">
-                        <ImageIcon className="size-7 text-muted-foreground/40" />
-                        <p className="text-sm text-muted-foreground">
-                          Image upload coming soon
-                        </p>
-                      </div>
-                      <input
-                        type="hidden"
-                        {...field}
-                        value={field.value ?? ""}
-                      />
+                    <FormItem>
+                      <FormLabel>
+                        Banner Image <span className="text-destructive">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <UploadWidget
+                          value={
+                            field.value
+                              ? {
+                                  url: field.value,
+                                  publicId: bannerPublicId ?? "",
+                                }
+                              : null
+                          }
+                          onChange={(file: any) =>
+                            setBannerImage(file, field)
+                          }
+                        />
+                      </FormControl>
                       <FormMessage />
+                      {errors.bannerCldPubId && !errors.bannerUrl && (
+                        <p className="text-sm text-destructive">
+                          {errors.bannerCldPubId.message?.toString()}
+                        </p>
+                      )}
                     </FormItem>
                   )}
                 />

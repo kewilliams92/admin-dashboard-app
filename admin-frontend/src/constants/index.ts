@@ -80,12 +80,9 @@ const missingEnvVars = (
   .map(([name]) => name);
 
 if (missingEnvVars.length > 0) {
-  const message = `Missing required environment variables: ${missingEnvVars.join(", ")}`;
-  if (import.meta.env.PROD) {
-    throw new Error(message);
-  } else {
-    console.warn(message);
-  }
+  throw new Error(
+    `Missing required environment variables: ${missingEnvVars.join(", ")}`
+  );
 }
 
 export const REFRESH_TOKEN_URL = `${BASE_URL}/refresh-token`;
